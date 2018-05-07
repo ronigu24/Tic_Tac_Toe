@@ -1,3 +1,6 @@
-make
-clang++-5.0 -std=c++14 main.cpp Board.cpp Board.h  *.o
-./a.out
+CXX=clang++-5.0
+CXXFLAGS=-std=c++14
+
+all:
+	$(CXX) $(CXX+) main.cpp Board.cpp Board.h -o a.out
+	./a.out 
