@@ -1,5 +1,5 @@
 #include "Board.h"
-
+#include <math.h>
 //Constructor Functions -
 
 
@@ -59,13 +59,11 @@ Node& Board::operator[](list<int> index)
 	{
 		return mat[bIndex.i][bIndex.j];
 	}
-
 	else
 	{
 		throw IllegalCoordinateException(bIndex);
 	}
 }
-
 Node& Board::operator[](const BoardIndex& coor) const
 {
 	int a = coor.i;
@@ -77,7 +75,6 @@ Node& Board::operator[](const BoardIndex& coor) const
 	{
 		return mat[bIndex.i][bIndex.j];
 	}
-
 	else
 	{
 		throw IllegalCoordinateException(bIndex);
@@ -96,7 +93,6 @@ Board& Board::operator=(char value)
 				this->mat[i][j].setSymbol(value);
 			}
 		}
-
 	}
 	return *this;
 }
@@ -124,7 +120,6 @@ Board& Board::operator=(const Board& db)
 }
 Board& Board::operator=(int value){
 
-
 	n = value;
 	mat = new Node*[n];
 
@@ -133,7 +128,6 @@ Board& Board::operator=(int value){
 		mat[i] = new Node[n];
 	}
 	return *this;
-
 }
 struct RGB {
 	uint8_t red, green, blue;
@@ -148,20 +142,16 @@ string Board::draw(int val){
 	imageFile << "P6" << endl << dimx <<" " << dimy << endl << 255 << endl;
 	RGB image[dimx*dimy];
 	int charsize=val/n;
-
-
-	for(int i = 1; i < n; i++)
+	for(int i = 0; i < n; i++)
 	{
+
+
 		for(int j = 0; j < val; j++)
 		{
 			image[charsize*val*i+j].green = (255);
 			image[charsize*i+j*val].green = (255);
-
 		}
 	}
-
-
-
 	for(int f=0;f<n;f++)
 	{
 		for(int g=0;g<n;g++)
@@ -171,37 +161,35 @@ string Board::draw(int val){
 				for(int loc=1;loc<charsize;loc++)
 				{
 					image[val*charsize*f+val*loc+g*charsize+loc].red = (255);
+					image[val*charsize*f+val*loc+g*charsize+loc].green = (0);
+					image[val*charsize*f+val*loc+g*charsize+loc].blue = (0);
 					image[val*charsize*f+val*loc+charsize+g*charsize-loc].red = (255);
-
+					image[val*charsize*f+val*loc+charsize+g*charsize-loc].green = (0);
+					image[val*charsize*f+val*loc+charsize+g*charsize-loc].blue = (0);
 				}
 
 			}
 			else if(mat[f][g].getSymbol()=='O')
 			{
-				for(int loc=1;loc<charsize;loc++)
+				for(int row=1;row<charsize;row++)
 				{
-					int rx=g*charsize/2+loc;
-					int ry=f*(charsize/2);
-					int dx = abs(rx- charsize*g+loc) ; // horizontal offset
-					int dy = abs(ry- charsize*f+loc); // vertical offset
-					if ( (dx*dx + dy*dy) <= ((charsize/2)*(charsize/2)) )
+					for(int loc=1;loc<charsize;loc++)
 					{
-						image[val*charsize*f+g*charsize+loc].blue = (255);
-						//image[dx*dy].blue = (255);
-
+						int rx=charsize/2;
+						int ry=charsize/2;
+						int dx = (rx- loc) ; // horizontal offset
+						int dy = (ry-row); // vertical offset
+						if ( (dx*dx + dy*dy) <= (rx*rx))
+						{
+							image[val*charsize*f+row*val+g*charsize+loc].red = (0);
+							image[val*charsize*f+row*val+g*charsize+loc].green = (0);
+							image[val*charsize*f+row*val+g*charsize+loc].blue = (128);
+						}
 					}
-
 				}
-
 			}
 		}
 	}
-	image[0].red = 255;
-	image[0].blue = 0;
-	image[0].green = 0;
-	///
-	///image processing
-	///
 	imageFile.write(reinterpret_cast<char*>(&image), 3*dimx*dimy);
 	imageFile.close();
 	return filename;
