@@ -1,6 +1,19 @@
 #include "Board.h"
-#include <math.h>
+
 //Constructor Functions -
+/*Board::Board()
+{
+	this->n = 1;
+	mat = new Node*[n];
+	for(int i = 0; i < n ;i++)
+	{
+		mat[i] = new Node[n];
+		for(int j = 0; j < n ;j++)
+		{
+			mat[i][j] = Node('.');
+		}
+	}
+}*/
 
 
 Board::Board(int value)
@@ -59,11 +72,13 @@ Node& Board::operator[](list<int> index)
 	{
 		return mat[bIndex.i][bIndex.j];
 	}
+
 	else
 	{
 		throw IllegalCoordinateException(bIndex);
 	}
 }
+
 Node& Board::operator[](const BoardIndex& coor) const
 {
 	int a = coor.i;
@@ -75,6 +90,7 @@ Node& Board::operator[](const BoardIndex& coor) const
 	{
 		return mat[bIndex.i][bIndex.j];
 	}
+
 	else
 	{
 		throw IllegalCoordinateException(bIndex);
@@ -93,6 +109,7 @@ Board& Board::operator=(char value)
 				this->mat[i][j].setSymbol(value);
 			}
 		}
+
 	}
 	return *this;
 }
@@ -100,7 +117,7 @@ Board& Board::operator=(char value)
 Board& Board::operator=(const Board& db)
 {
 	this->~Board();
-
+	
 	this->n = db.n;
 	mat = new Node*[n];
 
@@ -118,6 +135,7 @@ Board& Board::operator=(const Board& db)
 	}
 	return *this;
 }
+
 Board& Board::operator=(int value){
 
 	n = value;
@@ -129,15 +147,24 @@ Board& Board::operator=(int value){
 	}
 	return *this;
 }
+
 struct RGB {
 	uint8_t red, green, blue;
 public:
 	RGB() {}
 	RGB(uint8_t red, uint8_t green, uint8_t blue): red(red), green(green), blue(blue) {}
 };
+
 string Board::draw(int val){
-	const int dimx = val, dimy = val;
-	string filename="cpp.ppm";
+	const int dimx = val;
+	const int dimy = val;
+
+	int k=1;
+	string filename="cpp"+to_string(k)+".ppm";
+	//ofstream imageFile(filename, ios::out | ios::binary);
+	while(ifstream(filename)){
+		filename="cpp"+to_string(++k)+".ppm";
+	}
 	ofstream imageFile(filename, ios::out | ios::binary);
 	imageFile << "P6" << endl << dimx <<" " << dimy << endl << 255 << endl;
 	RGB image[dimx*dimy];

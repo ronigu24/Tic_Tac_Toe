@@ -1,8 +1,8 @@
 #pragma once
-#include<iostream>
-#include<fstream>
+#include <iostream>
 #include <list>
 #include <string>
+#include <fstream>
 
 #include "BoardNode.h"
 #include "CoordinateException.h"
@@ -15,7 +15,7 @@ using namespace std;
 class Board{
 
 public:
-
+    
 	Node **mat;
 	int n;
 	Board(){
@@ -33,43 +33,14 @@ public:
 	Board& operator=(char value);
 	Board& operator=(const Board& db);
 	Board& operator=(int value);
+
 	friend ostream& operator<<(ostream& os, Board const &b);
-	friend istream& operator>>(istream& is, Board  &b);
 	friend bool operator==(const Board& b1, const Board& b2);
+
+	friend istream& operator>>(istream& is, Board &b);
 	string draw(int val);
 
-
-	};
-
-inline istream& operator>>(istream& is, Board &b){
-	string f;
-		is>>f;
-		ifstream file;
-		file.open(f);
-		bool once=true;
-		int i=0;
-		string line;
-	if(file.fail()){
-		cout<<"fail";
-	}
-	else{
-		while(file>>line)
-		{
-			if(once)
-			{
-				b=(int)line.length();
-				once=false;
-			}
-			for(unsigned int j=0;j<line.length();j++)
-			{
-				b[{i,(int)j}]=line.at((int)j);
-			}
-			i++;
-		}
-	}
-		file.close();
-		return is;
-}
+};
 
 inline ostream& operator<<(ostream& os, Board const &b) {
 
@@ -99,9 +70,32 @@ inline bool operator==(const Board& b1, const Board& b2){
 				if(b1.mat[i][j].getSymbol() != b2.mat[i][j].getSymbol()){
 					return false;
 				}
-
+				
 			}
 		}
 		return true;
 	}
+}
+
+inline istream& operator>>(istream& is, Board &b){
+	string f;
+	bool once = true;
+	int i = 0;
+	while(getline(cin,f))
+	{
+		if(once)
+			{
+				b=(int)f.length();
+				once=false;
+			}
+
+		for(unsigned int j=0;j<f.length();j++)
+			{
+				b[{i,(int)j}]=f.at((int)j);
+			}
+			i++;
+	}
+	
+
+return is;
 }
